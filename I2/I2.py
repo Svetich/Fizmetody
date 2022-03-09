@@ -161,13 +161,13 @@ plt.close()
 
 print('nu гр = ' + str(a) + '+-' + str(s_a))
 
-print('На основе линейной регресии были взяты omega e и omega e chi')
+print('На основе параболической регресии были взяты omega e и omega e chi')
 print('Определение D0')
 
-D0_a = b_ ** 2/ (4 * a_/(-2))
-s_D0_a = D0_a * sqrt((2 * s_b_/b_) ** 2 + (s_a_/a_) ** 2)
+D0_a = B ** 2/ (4 * (-1 * C))
+s_D0_a = D0_a * sqrt((2 * s_B/B) ** 2 + (s_C/C) ** 2)
 
-print('a) = ' + str(D0_a) + '+-' + str(D0_a))
+print('a) = ' + str(D0_a) + '+-' + str(s_D0_a))
 
 D0_b = a - nu_00
 s_D0_b = sqrt(s_a ** 2 + s_nu_00 ** 2)
