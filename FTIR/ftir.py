@@ -305,7 +305,86 @@ s_r = r * 1/2 * sB/B
 print('r = ' + str(r * 10**(8)) + '+-' + str(s_r * 10**8))
 
 omega_e = np.mean([omega_e_r, omega_e_p])
-s_omega_e = sqrt(np.std([omega_e_r, omega_e_p])**2 + omega_e_r ** 2)
+s_omega_e = sqrt(np.std([omega_e_r, omega_e_p])**2 + s_omega_e_r ** 2)
 
-k = mu * 10**3 * (omega_e * 1.98 * 10**(-23) * 2 * 3.14 * 3 * 10**8) ** 2
-# print(k)
+print('среднее omega e = ' + str(omega_e) + '+-' + str(s_omega_e))
+
+k = mu * (omega_e * 2 * 3.14 * 3 * 10**8) ** 2
+sk = k * 2 * s_omega_e/omega_e
+print('k = ' + str(k) + '+-' + str(sk))
+
+mu_37 = 37/38 * 1.66 * 10**(-24)
+
+omega_e_37 = 1/(2 * 3.14 * 3 * 10**8) * sqrt(k/mu_37)
+s_omega_e37 = omega_e_37 * 1/2 * sk/k
+print('omega e 37 = ' + str(omega_e_37) + '+-' + str(s_omega_e37))
+
+s_delta_nu = sqrt(s_omega_e ** 2+ s_omega_e37**2)
+
+print('delta nu = ' + str(omega_e - omega_e_37) + '+-' + str(s_delta_nu))
+
+R = omega_e/(omega_e - omega_e_37)
+sR = sqrt((s_omega_e/omega_e)**2 + (s_delta_nu/(omega_e - omega_e_37)) ** 2)
+
+print('R = ' + str(R) + '+-' + str(sR))
+
+print('Задание с Ar, Kr')
+
+file = open(os.path.join('files', 'Ar_matrix.dpt'))
+file_str = file.read().splitlines()
+lam_Ar = []
+abs_Ar = []
+for i in range(len(file_str)):
+    lam_Ar.append(float(file_str[i].split()[0]))
+    abs_Ar.append(float(file_str[i].split()[1]))
+file.close()
+
+
+file = open(os.path.join('files', 'Kr_matrix.dpt'))
+file_str = file.read().splitlines()
+lam_Kr = []
+abs_Kr = []
+for i in range(len(file_str)):
+    lam_Kr.append(float(file_str[i].split()[0]))
+    abs_Kr.append(float(file_str[i].split()[1]))
+file.close()
+
+plt.figure(figsize=(10, 6))
+plt.plot(lam_Ar, abs_Ar, '-', color='green', lw=1)
+plt.xlabel(r'$\nu$, см$^{-1}$ ', size=14)
+plt.ylabel(r'Поглощение', size=14)
+plt.savefig('Ar.png')
+plt.close()
+
+plt.figure(figsize=(10, 6))
+plt.plot(lam_Kr, abs_Kr, '-', color='green', lw=1)
+plt.xlabel(r'$\nu$, см$^{-1}$ ', size=14)
+plt.ylabel(r'Поглощение', size=14)
+plt.savefig('Kr.png')
+plt.close()
+
+
+plt.plot(lam_Ar, abs_Ar, '-', color='green', lw=1)
+plt.xlim(1000, 1300)
+plt.ylim(-0.05, 0.2)
+plt.xlabel(r'$\nu$, см$^{-1}$ ', size=14)
+plt.ylabel(r'Поглощение', size=14)
+plt.savefig('Ar_cut.png')
+plt.close()
+
+
+d_ar = 3 / (2 * 1.3 * (1167.65203 - 1113.37585))
+
+print('d_ar = ' + str(d_ar) + 'см')
+
+plt.plot(lam_Kr, abs_Kr, '-', color='green', lw=1)
+plt.hlines(0.00109, 1000, 1300)
+plt.xlim(1000, 1300)
+plt.ylim(-0.008, 0.002)
+plt.xlabel(r'$\nu$, см$^{-1}$ ', size=14)
+plt.ylabel(r'Поглощение', size=14)
+plt.savefig('Kr_cut.png')
+plt.close()
+
+d_kr = 2 /(2 * 1.4 * (1290.48189-1114.44216))
+print('d_kr' + str(d_kr))
